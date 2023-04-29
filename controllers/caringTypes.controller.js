@@ -60,10 +60,24 @@ const updateCaringType = async (id, payload) => {
   }
 };
 
+const searchCType = async (searchValue) => {
+  try {
+    const caringTypes = await caringTypesmodule.find({
+      $or: [{ name: searchValue }, { description: searchValue }],
+    });
+
+    return caringTypes;
+  } catch (error) {
+    console.error(error, "Error searching Caring Types,,,");
+    return [];
+  }
+};
+
 module.exports = {
   getAllCaringTypes,
   getCaringType,
   removeCaringType,
   updateCaringType,
   addNewCType,
+  searchCType,
 };

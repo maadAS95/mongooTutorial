@@ -1,4 +1,3 @@
-const { $where } = require("../modules/caring.module");
 const nursesModule = require("../modules/nurses.module");
 
 const getAllNurses = async () => {

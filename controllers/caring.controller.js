@@ -1,4 +1,5 @@
 const caringModule = require("../modules/caring.module");
+const CaringType = require("../modules/caringTypes.module");
 
 const getAllCarings = async () => {
   try {
@@ -54,9 +55,55 @@ const getCaringByNurseId = async (nurseId) => {
   }
 };
 
+const searchCaring = async (searchValue) => {
+  try {
+    const targetCaring = await CaringType.find({
+      $or: [
+        { description: searchValue },
+        { nurseId: searchValue },
+        { patientId: searchValue },
+        { caringTypeId: searchValue },
+      ],
+    });
+
+    return targetCaring;
+  } catch (error) {
+    console.error(error, "Error searching Caring ,,,");
+    return [];
+  }
+};
+
+const updateCaring = async (caringId, data) => {
+  try {
+    const oneCaring = await getOneCaring(caringId);
+    if (!oneCaring) return false;
+    const caringTypeId = data.caringTypeId
+      ? data.caringTypeId
+      : oneCaring.caringTypeId;
+    const nurseId = data.nurseId ? data.nurseId : oneCaring.nurseId;
+    const patientId = data.patientId ? data.patientId : oneCaring.patientId;
+    const time = data.time ? data.time : oneCaring.time;
+    const description = data.description
+      ? data.description
+      : oneCaring.description;
+
+    const newCaring = await CaringType.updateOne(
+      { _id: caringId },
+      { $set: { caringTypeId, description, nurseId, patientId, time } }
+    );
+
+    return newCaring;
+  } catch (error) {
+    console.error(error, "Error searching CupdateCaringType,,,");
+    return false;
+  }
+};
+
 module.exports = {
   getAllCarings,
   addNewCarings,
   getOneCaring,
   getCaringByNurseId,
+  searchCaring,
+  updateCaring,
 };

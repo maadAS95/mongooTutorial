@@ -73,12 +73,9 @@ const updatePatient = async (id, payload) => {
 
 const searchPatient = async (searchValue) => {
   try {
+    console.log(isNaN(searchValue), "nan");
     const patients = await patientModule.find({
-      $or: [
-        { room: searchValue },
-        { name: searchValue },
-        { phone: searchValue },
-      ],
+      $or: [{ room: searchValue }, { name: searchValue }],
     });
     return patients;
   } catch (error) {
